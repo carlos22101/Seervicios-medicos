@@ -2,30 +2,38 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MainLayout from '../../../core/layout/MainLayout';
 import PacienteTable from '../components/PacienteTable';
+import { pacientesService } from '../services/pacientesService';
 
 export default function PacientesList() {
-  
+  const [pacientes, setPacientes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const initialMocks = [
-    { id: 1, nombre: 'Juan Pérez Pérez', curp: 'GRTS124567VIL8SLZA', email: 'juan123@gmail.com', expediente: '233679016' },
-    { id: 2, nombre: 'Maria Lopez Garcia', curp: 'MLPS987654MDFRNN09', email: 'maria.log@hotmail.com', expediente: '233679017' },
-    { id: 3, nombre: 'Pedro Ramirez', curp: 'PRMR112233HDFRNS05', email: 'pedro.ram@yahoo.com', expediente: '233679018' },
-  ];
-
-  const [pacientes, setPacientes] = useState(initialMocks);
-
-  
   useEffect(() => {
-    const storedPacientes = JSON.parse(localStorage.getItem('pacientesMock')) || [];
-    if (storedPacientes.length > 0) {
-      setPacientes([...initialMocks, ...storedPacientes]);
-    }
+    const fetchPacientes = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      try {
+        setLoading(true);
+        // Llamada a la API Real
+        const data = await pacientesService.getMisPacientes(token);
+        setPacientes(data);
+      } catch (error) {
+        console.error("Error cargando pacientes:", error);
+        // Opcional: Si falla la API, podrías dejar el array vacío o mostrar un error
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPacientes();
   }, []);
 
   return (
     <MainLayout>
       <div className="w-full px-10 py-8">
         
+        {/* Encabezado */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-blue-900 uppercase">
             PACIENTES
@@ -42,8 +50,13 @@ export default function PacientesList() {
           </Link>
         </div>
 
+        {/* Tabla */}
         <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
-             <PacienteTable data={pacientes} />
+             {loading ? (
+                <div className="p-10 text-center text-gray-500">Cargando pacientes...</div>
+             ) : (
+                <PacienteTable data={pacientes} />
+             )}
         </div>
 
       </div>
