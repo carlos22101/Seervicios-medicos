@@ -1,8 +1,8 @@
 import MainLayout from '../../../core/layout/MainLayout';
 import CardMenu from '../components/CardMenu';
 
-import iconPacientes from '/bio.png'; 
-import iconRecetas from '/bio.png';   
+import iconPacientes from '/paciente 1.png'; 
+import iconRecetas from '/documento 1.png';   
 
 export default function DashboardMedico() {
   return (

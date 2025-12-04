@@ -18,7 +18,7 @@ export default function MainLayout({ children }) {
         {/* Al hacer click aquí, redirige al Dashboard Médico */}
         <Link to="/medico" className="flex items-center cursor-pointer hover:opacity-90 transition-opacity">
             {/* Asegúrate de que 'bio.png' esté en la carpeta public */}
-            <img src="/bio.png" alt="Logo UPA" className="h-14 object-contain" />
+            <img src="/logo.jpeg" alt="Logo UPA" className="h-14 object-contain" />
         </Link>
 
         {/* DERECHA: ÁREA DE USUARIO */}
