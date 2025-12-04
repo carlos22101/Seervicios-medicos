@@ -15,8 +15,7 @@ export const pacientesService = {
     return await response.json();
   },
 
-  // --- PASO 1: CREAR PACIENTE ---
-  // Ruta: /pacientes/
+  // --- CREAR PACIENTE ---
   async createPaciente(data, token) {
     const response = await fetch(`${API_URL}/pacientes/`, {
         method: 'POST',
@@ -31,30 +30,66 @@ export const pacientesService = {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.detail || errorData.message || 'Error al crear paciente');
     }
-
-    // Esperamos que la API devuelva el objeto creado con su ID (ej: { id: 5, nombre: ... })
     return await response.json(); 
   },
 
-  // --- PASO 2: ASIGNAR PACIENTE AL MÉDICO ---
-  // Ruta: /pacientes/asignar
+  // --- ASIGNAR PACIENTE ---
   async asignarPaciente(idPaciente, token) {
-    const payload = { id_paciente: idPaciente };
-    
     const response = await fetch(`${API_URL}/pacientes/asignar`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ id_paciente: idPaciente }),
     });
 
-    if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.detail || 'Error al asignar paciente al médico');
-    }
+    if (!response.ok) throw new Error('Error al asignar paciente');
+    return await response.json();
+  },
 
+  // --- NUEVO: ELIMINAR (REMOVER) PACIENTE DE MI LISTA ---
+  // Ruta: DELETE /pacientes/{id}
+  async removePaciente(id, token) {
+    const response = await fetch(`${API_URL}/pacientes/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    if (!response.ok) throw new Error('Error al remover el paciente');
+    return true;
+  },
+
+  // --- NUEVO: CARGAR RECETA (PDF) ---
+  // Ruta: POST /recetas/cargar/{paciente_id}
+  async uploadReceta(idPaciente, file, token) {
+    const formData = new FormData();
+    formData.append('file', file); // Asumimos que el campo se llama 'file'
+
+    const response = await fetch(`${API_URL}/recetas/cargar/${idPaciente}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+        // NOTA: No poner 'Content-Type': 'multipart/form-data', el navegador lo pone solo con el boundary
+      },
+      body: formData
+    });
+
+    if (!response.ok) throw new Error('Error al subir la receta');
+    return await response.json();
+  },
+
+  // --- NUEVO: OBTENER HISTORIAL DE RECETAS ---
+  // Ruta: GET /recetas/paciente/{paciente_id}
+  async getHistorialRecetas(idPaciente, token) {
+    const response = await fetch(`${API_URL}/recetas/paciente/${idPaciente}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    if (!response.ok) throw new Error('Error al obtener el historial de recetas');
     return await response.json();
   }
 };
