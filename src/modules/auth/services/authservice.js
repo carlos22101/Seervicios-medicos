@@ -1,7 +1,6 @@
 const API_URL = 'http://34.198.88.1';
 
 export const authService = {
-  // --- LOGIN (Ya lo tenías, lo dejo igual) ---
   async login(email, inputSecret) {
     const isPaciente = /^\d+$/.test(inputSecret);
     const endpoint = isPaciente 
@@ -9,7 +8,7 @@ export const authService = {
       : `${API_URL}/auth/login`;
 
     const payload = isPaciente
-      ? { correo: email, expediente: inputSecret }  
+      ? { correo: email, num_expediente: inputSecret }  
       : { correo: email, contrasena: inputSecret };   
 
     const response = await fetch(endpoint, {
