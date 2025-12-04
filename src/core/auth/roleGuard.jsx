@@ -1,10 +1,21 @@
-import { useAuth } from './AuthContext'
-import { Navigate } from 'react-router-dom'
+import { Navigate } from "react-router-dom";
+import { useAuth } from "./AuthContext";
 
+export const RoleGuard = ({ children, allow }) => {
+  const { user, loading } = useAuth();
 
-export function RoleGuard({ children, allow = [] }){
-const { user } = useAuth()
-if(!user) return <Navigate to="/login" />
-if(!allow.includes(user.role)) return <Navigate to="/login" />
-return children
-}
+  if (loading) return <div>Cargando...</div>;
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  const userRole = user.tipo || user.role; 
+
+  if (!allow.includes(userRole)) {
+ 
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+};

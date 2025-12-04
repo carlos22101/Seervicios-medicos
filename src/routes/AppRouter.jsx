@@ -3,7 +3,7 @@ import LoginPage from "../modules/auth/pages/LoginPage";
 import { RoleGuard } from "../core/auth/roleGuard";
 import MedicoRouter from "./MedicoRouter";
 import PacienteRouter from "./PacienteRouter";
-// IMPORTAR EL ROUTER DE ADMIN
+// IMPORTAR EL ROUTER DE ADMIN (Asegúrate de crear este archivo, paso 2)
 import AdminRouter from "./AdminRouter"; 
 
 export default function AppRouter() {
@@ -22,13 +22,15 @@ export default function AppRouter() {
             <RoleGuard allow={["paciente"]}> <PacienteRouter /> </RoleGuard>
         } />
 
-        {/* --- NUEVA: Ruta del Administrador --- */}
+        {/* --- CORRECCIÓN AQUÍ --- */}
+        {/* Cambiado 'admin' por 'administrador' para coincidir con tu API */}
         <Route path="/admin/*" element={
-            <RoleGuard allow={["admin"]}> 
+            <RoleGuard allow={["administrador"]}> 
               <AdminRouter /> 
             </RoleGuard>
         } />
 
+        {/* Redirección por defecto */}
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>
