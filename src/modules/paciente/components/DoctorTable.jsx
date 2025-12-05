@@ -1,48 +1,62 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-export default function DoctorTable({ data }) {
+export default function RecetasTable({ data }) {
+  const API_URL = 'http://98.94.250.137:8000';
+
   return (
-    <div className="overflow-hidden rounded-lg border border-gray-200 shadow-sm">
-      <table className="min-w-full text-left border-collapse">
-        <thead className="bg-gray-300 text-gray-800 font-medium">
+    <div className="overflow-x-auto">
+      <table className="min-w-full text-sm text-left">
+        {/* ENCABEZADO */}
+        <thead className="bg-blue-50 text-blue-900 font-bold uppercase">
           <tr>
-            <th className="py-4 px-6 w-1/2">Doctor</th>
-            <th className="py-4 px-6 w-1/2">Especialidad</th>
-            <th className="py-4 px-6 w-16"></th> {/* Columna vacía para el icono */}
+            <th className="py-4 px-6">Fecha Emisión</th>
+            <th className="py-4 px-6">Médico Asignado</th>
+            <th className="py-4 px-6">Correo Médico</th>
+            <th className="py-4 px-6 text-center">Receta</th>
           </tr>
         </thead>
         
-        <tbody className="bg-gray-50/50">
-          {data.length > 0 ? (
-            data.map((doctor) => (
-              <tr key={doctor.id} className="border-b border-gray-200 hover:bg-white transition-colors">
-                {/* Nombre del Doctor */}
-                <td className="py-5 px-6 font-bold text-gray-900">
-                  {doctor.nombre}
-                </td>
-                {/* Especialidad */}
-                <td className="py-5 px-6 text-gray-600">
-                  {doctor.especialidad}
+        {/* CUERPO */}
+        <tbody className="text-gray-700">
+          {data && data.length > 0 ? (
+            data.map((receta) => (
+              <tr key={receta.id} className="border-b border-gray-100 hover:bg-gray-50 transition">
+                
+                {/* Fecha */}
+                <td className="py-4 px-6 font-medium">
+                   {receta.fecha_emision}
                 </td>
                 
-                <td className="py-5 px-6 text-right">
-                  <Link 
-                    to={`/paciente/recetas/doctor/${doctor.id}`} 
-                    className="inline-block text-blue-800 hover:text-blue-600 transition-colors"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 13.5h.008v.008H9V13.5zm3 0h.008v.008H12V13.5zm3 0h.008v.008H15V13.5zm-6 3h.008v.008H9V16.5zm3 0h.008v.008H12V16.5zm3 0h.008v.008H15V16.5z" />
-                    </svg>
-                  </Link>
+                {/* Nombre del Médico (Viene dentro del objeto 'medico') */}
+                <td className="py-4 px-6 font-bold text-gray-900">
+                   Dr. {receta.medico?.nombre || 'Desconocido'}
+                </td>
+                
+                {/* Correo del Médico */}
+                <td className="py-4 px-6 text-gray-500">
+                   {receta.medico?.correo}
+                </td>
+                
+                {/* Acciones: Ver PDF */}
+                <td className="py-4 px-6 text-center">
+                   <a 
+                      href={`${API_URL}/uploads/${receta.archivo_pdf}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-md font-bold hover:bg-blue-200 transition-colors text-xs uppercase tracking-wide"
+                   >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                      </svg>
+                      Ver PDF
+                   </a>
                 </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="3" className="py-8 text-center text-gray-500">
-                No se encontraron doctores.
+              <td colSpan="4" className="py-10 text-center text-gray-400">
+                No se encontraron recetas.
               </td>
             </tr>
           )}
