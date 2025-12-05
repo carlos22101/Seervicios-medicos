@@ -3,7 +3,7 @@ import LoginForm from '../components/LoginForm';
 import { useAuth } from '../../../core/auth/AuthContext'; // Ajusta la ruta si es necesario
 import { useNavigate } from 'react-router-dom';
 import fondoImg from '/fondo.png'; 
-import logo from '/logo.jpeg'; 
+import logo from '/logo.png'; 
 
 export default function LoginPage() {
   const { login } = useAuth();

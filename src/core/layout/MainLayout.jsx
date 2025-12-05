@@ -19,7 +19,7 @@ export default function MainLayout({ children }) {
         
         {/* LOGO */}
         <Link to="/medico" className="flex items-center cursor-pointer hover:opacity-90 transition-opacity">
-            <img src="/logo.jpeg" alt="Logo UPA" className="h-14 object-contain" />
+            <img src="/logo.png" alt="Logo UPA" className="h-14 object-contain" />
         </Link>
 
         {/* ÁREA DE USUARIO */}
