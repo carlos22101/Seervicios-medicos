@@ -1,4 +1,4 @@
-const API_URL = 'http://34.198.88.1';
+const API_URL = 'http://98.94.250.137:8000';
 
 export const adminService = {
   
